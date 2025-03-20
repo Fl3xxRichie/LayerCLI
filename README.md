@@ -97,6 +97,68 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 ```
 
+#### Windows (WSL)
+
+```bash
+# Install WSL if not already installed (run in PowerShell as Administrator)
+# wsl --install
+
+# After WSL is installed and you're in Ubuntu on WSL:
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install essential packages
+sudo apt install -y build-essential cmake pkg-config libssl-dev clang git curl
+
+# Install Go
+wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+```
+
+#### Termux (with Ubuntu)
+
+```bash
+# Install Termux from F-Droid and run:
+
+# Update Termux packages
+pkg update && pkg upgrade -y
+
+# Install required packages in Termux
+pkg install proot-distro curl
+
+# Install Ubuntu in Termux
+proot-distro install ubuntu
+
+# Login to Ubuntu
+proot-distro login ubuntu
+
+# Now inside Ubuntu in Termux:
+# Update system
+apt update && apt upgrade -y
+
+# Install essential packages
+apt install -y build-essential cmake pkg-config libssl-dev clang git curl wget
+
+# Install Go
+wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz
+rm -rf /usr/local/go
+tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+```
+
 ### RISC0 Installation
 
 ```bash
@@ -116,7 +178,7 @@ git checkout v0.19.1
 cargo build --release
 
 # Add to PATH
-echo 'export PATH=$PATH:'"$HOME/risc0/target/release" >> ~/.bashrc
+echo 'export PATH=$PATH:'\"$HOME/risc0/target/release\" >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -223,6 +285,41 @@ sudo swapon /swapfile
    - Check wallet balance
    - Ensure correct network configuration
 
+### Platform-Specific Issues
+
+#### Termux Issues
+
+1. **Storage Permission**
+   - Run `termux-setup-storage` to grant storage permissions
+   - Restart Termux after granting permissions
+
+2. **Memory Limitations**
+   - Reduce compilation parallelism with `export CARGO_BUILD_JOBS=1`
+   - Close other apps before building resource-intensive components
+
+3. **Ubuntu PRoot Issues**
+   - If Ubuntu fails to start: `proot-distro reset ubuntu`
+   - For DNS issues: `echo "nameserver 8.8.8.8" > ~/resolv.conf && proot-distro login ubuntu --bind ~/resolv.conf:/etc/resolv.conf`
+
+#### Windows WSL Issues
+
+1. **WSL Performance**
+   - Store project files in the Linux filesystem, not Windows-mounted drives
+   - Add to `.wslconfig` in Windows user directory:
+     ```
+     [wsl2]
+     memory=8GB
+     processors=4
+     ```
+
+2. **File Permissions**
+   - If getting permission errors: `chmod -R 755 ./light-node`
+   - For git issues: `git config --global core.fileMode false`
+
+3. **Network Connectivity**
+   - If gRPC connection fails, check Windows firewall settings
+   - Try `wsl --shutdown` and restart WSL if network issues persist
+
 ## Security Recommendations
 
 1. **Private Key Management**
@@ -249,4 +346,3 @@ sudo swapon /swapfile
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Fl3xxRichie)
 [![Private Channel](https://img.shields.io/badge/Private_Channel-%23FF5733.svg?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/+GIfY4Pb0Spw5OGZk)
 [![Direct Contact](https://img.shields.io/badge/Direct_Contact-%23009688.svg?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/flexxrichie)
-
