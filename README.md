@@ -5,7 +5,7 @@
 
 
 
-[![Telegram](https://img.shields.io/badge/Discord-Join%20Chat-blue)](https://t.me/airdrop3arn)
+[![Telegram](https://img.shields.io/badge/Twitter-Join%20Chat-blue)](https://t.me/airdrop3arn)
 [![Twitter Follow](https://img.shields.io/twitter/follow/LayerEdge?style=social)](https://twitter.com/flexxrichie)
 
 *A comprehensive guide for setting up and running a LayerEdge Light Node*
